@@ -1,171 +1,111 @@
-import time import random from random import randint from generate_line import generate_line 
+import random
+from generate_line import generate_line
 
-#-------------------------
+
+# -------------------- RIDE DATABASE --------------------
+
+rides = {
+    1: {"name": "Scenic River Cruise", "min_age": 0, "max_age": None},
+    2: {"name": "Carnival Carousel", "min_age": 3, "max_age": None},
+    3: {"name": "Jungle Adventure Water Splash", "min_age": 6, "max_age": None},
+    4: {"name": "Downhill Mountain Run", "min_age": 12, "max_age": None},
+    5: {"name": "The Regurgitator", "min_age": 12, "max_age": 70},
+    6: {"name": "The Hot Rod", "min_age": 10, "max_age": None},
+    7: {"name": "Dizzy World", "min_age": 13, "max_age": None},
+    8: {"name": "Mirror Maze", "min_age": 5, "max_age": None},
+    9: {"name": "Rapid Relay", "min_age": 15, "max_age": None},
+    10: {"name": "The Gravity Defier", "min_age": 18, "max_age": None}
+}
+
+
+# -------------------- FUNCTIONS --------------------
+
+def display_rides():
+    print("\nAvailable Rides:\n")
+    for number, ride in rides.items():
+        print(f"{number}. {ride['name']}")
+    print()
+
+
+def get_valid_age():
+    while True:
+        try:
+            age = int(input("Enter your age: "))
+            if age < 0:
+                print("Age cannot be negative.")
+                continue
+            return age
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+
+def check_eligibility(ride_info, age):
+    min_age = ride_info["min_age"]
+    max_age = ride_info["max_age"]
+
+    if age < min_age:
+        return False
+
+    if max_age is not None and age > max_age:
+        return False
+
+    return True
+
+
+def choose_ride():
+    choice = input("Would you like the system to choose a ride? (yes/no): ").lower()
+
+    if choice == "no":
+        while True:
+            try:
+                ride_number = int(input("Enter ride number (1-10): "))
+                if ride_number in rides:
+                    return ride_number
+                else:
+                    print("Invalid ride number.")
+            except ValueError:
+                print("Please enter a valid number.")
+    else:
+        return random.randint(1, 10)
+
+
+# -------------------- MAIN --------------------
 
 while True:
 
-password=input("Enter the password: ") print() if password=='password':
+    password = input("Enter the password: ")
 
-print("You have successfully entered!")
+    if password != "password":
+        print("Incorrect password. Exiting program.")
+        break
 
-print()
+    print("\nAccess granted! Welcome to the Theme Park!\n")
 
-age=0
+    display_rides()
 
-print("""Welcome to our Theme Park!
+    continue_program = True
 
-These are the available rides:""") 
+    while continue_program:
 
-print() list = ('1. Scenic River Cruise', '2. Carnival Carousel', '3. Jungle Adventure Water Splash', '4. Downhill Mountain Run', '5. The Regurgitator', '6. The Hot Rod', '7. Dizzy World', '8. Mirror Maze', '9. Rapid Relay', '10. The Gravity Defier')
+        ride_number = choose_ride()
+        ride_info = rides[ride_number]
 
-for x in list:
+        print(f"\nYou selected: {ride_info['name']}")
+        generate_line(10, 50)
 
-print(x) print()
+        if ride_info["min_age"] == 0:
+            print("There is no age restriction for this ride!")
+        else:
+            age = get_valid_age()
 
-cont=True
+            if check_eligibility(ride_info, age):
+                print("You are eligible for this ride! Enjoy 🎢")
+            else:
+                print("Sorry, you are not eligible for this ride.")
 
-while cont==True:
+        again = input("\nWould you like to choose another ride? (yes/no): ").lower()
+        if again != "yes":
+            continue_program = False
+            print("\nThank you for visiting the Theme Park!")
 
-answer=input("Would you like the system to choose a ride for you? ").lower() if answer=='no':
-
-ride_number=input("Please enter the ride number you want: ") if not ride_number.isdigit() or int(ride_number) < 1 or int(ride_number) > 10: print("Invalid input, Please enter a valid number between 1 and 10") continue ride_number = int(ride_number) else:
-
-ride_number = random.randint(1,10) if ride_number == 1:
-
-print("""You have selected Scenic River Cruise The Scenic River Cruise is a rejuvenating experience.
-
-On this ride, get prepared to experience a world of zen. Just hop on to our multi-level ship, fully equipped with a buffet, a variety of refreshments, and more! Sit back, relax, and enjoy the journey.
-
-There is no age limit for this ride!""") print() generate_line(10,50) elif ride_number == 2:
-
-Carousel. Get ready,
-
-print("""You have selected Carnival Carousel Get ready to go to a world of nostalgia in the Carnival Giving you a variety of horses to embark your journey on. it's gonna be a wonderful time.
-
-The age limit for this ride is at least 3 years old!""") print() generate_line(10,50) age = int(input("What is your age? ")) if age < 3:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!") elif ride_number==3:
-
-print("""You have selected Jungle Adventure Water Splash Be prepared to get soaked! The Jungle Adventure Water Splash will drench your clothes, but not your spirit! The 100 foot drop at the end of the ride, accompanied by the magnificent views will guarantee you a memorable time!
-
-The age limit for this ride is at least 6 years old!""") print() generate_line(10,50) age = int(input("What is your age? ")) if age<6:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!")
-
-elif ride_number==4:
-
-print("""You have selected Downhill Mountain Run
-
-Reaching a speed of up to 120 mph, the Downhill Mountain Run is an exhilarating time.
-
-Leaving a breeze on your face, this ride will make you forget all your worries.
-
-The age limit for this ride is at least 12 years old!""") print() generate_line(10,50) age = int(input("What is your age? "))
-
-if age<12:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!")
-
-elif ride_number==5:
-
-print("""You have selected The Regurgitator
-
-Don't eat lunch before you get on this ride!
-
-The Regurgitator will make you twist and turn like no
-
-other ride.
-
-This ride includes 3 loops, two major drops, and 10 seconds of hang time.
-
-Only the bravest should attempt this ride.
-
-The age limit for this ride is at least 12 years old, and less than 70 years old!""") print() generate_line(10,50) age = int(input("What is your age? "))
-
-#Checks if the user's age is greater than 12 years old but less than 70 years old if age<12 or age>70:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!")
-
-elif ride_number==6:
-
-print("""You have selected The Hot Rod
-
-On this ride, you will have a blazing time. Consisting of many unpredictable ups and downs, your fuse will be blown by the end of it!
-
-The age limit for this ride is at least 10 years old!""") print() generate_line(10,50) age = int(input("What is your age? ")) if age<10:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!") elif ride_number==7:
-
-print("""You have selected Dizzy World This ride will be sure to make you hurl! Composed of 10 loop-the-loops and 20 seconds of upside down hang time, this ride is not for the weak.
-
-The age limit for this ride is at least 13 years old!""") print() generate_line(10,50) age = int(input("What is your age? ")) if age<13:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!") elif ride_number==8:
-
-print("""You have selected Mirror Maze I'm over here! Wait, I'm over there! The Mirror Maze is a trippy ride.
-
-This ride is an interactive adventure, with endless tunnels and illuminating lights!
-
-The age limit for this ride is at least 5 years old!""") print() generate_line(10,50) age = int(input("What is your age? ")) if age<5:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!") elif ride_number==9:
-
-print("""You have selected Rapid Relay On your mark, get set, go! On the Rapid Relay, race an opponent of equal calliber on a challenging course, with twists & turns, sharp edges, and more!
-
-Don't lose, it's a matter of pride!
-
-The age limit for this ride is at least 15 years old!""")
-
-print() generate_line(10,50) age = int(input("What is your age? "))
-
-if age<13:
-
-print("Sorry, you can't go on this ride.") else:
-
-print("You can go on this ride!")
-
-elif ride_number==10:
-
-print("""You have selected The Gravity Defier
-
-Get ready to challenge gravity! On the Gravity Defier, feel free in the air before you go back to your sad lonely life. Be prepared to soar in the sky and feel
-
-alive!
-
-The age limit for this ride is at least 18 years old!""")
-
-print() generate_line(10,50) age = int(input("What is your age? "))
-
-if age<18:
-
-print("Sorry, you can't go on this ride.""") else:
-
-print("You can go on this ride!")
-
-yes_no=input("Do you want to continue, yes or no? ").lower()
-
-if yes_no=='no':
-
-cont=False print("Thank you for coming! We hope you enjoyed!") else:
-
-continue
-
-else:
-
-if password!='password':
-
-print("Error, try again.") break
+    break
